@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="PedidoVenda">
+    
+    <resultMap id="resultadoPedidoVenda" type="modelo.PedidoVProduto">
+        <result property="quantidadeProduto" column="quantidadeProduto" />
+        <association property="id_produto" column="idProduto" javaType="modelo.Produto">
+            <id property="id" column="idProduto"/> 
+            <result property="nome" column="nome" />
+            <result property="categoria" column="categoria" />
+            <result property="precoCompra" column="precoCompra" />
+            <result property="precoVenda" column="precoVenda" />
+        </association>
+        <association property="id_pedido" column="idPedidoV" javaType="modelo.PedidoVenda">
+            <id property="id" column="idPedido"/>
+            <result property="nome" column="nomePedido" />
+            <result property="data_pedido" column="data_pedido" />
+            <association property="cliente_id" column="cliente_id" javaType="modelo.Cliente">
+                <id property="idCliente" column="id"/>
+                <result property="nome" column="nomeCliente" />
+            </association>
+        </association>
+    </resultMap>
+    
+    <select id="selecionarTodosPedidosVenda" resultMap="resultadoPedidoVenda">
+        SELECT
+            pedV.idProduto, pedV.idPedidoV, pedV.quantidadeProduto,
+            pro.idProduto, pro.nome, pro.categoria,
+            pro.precoCompra, pro.precoVenda,
+            ped.idPedido, ped.nomePedido,
+            ped.data_pedido, ped.cliente_id,
+            cli.idCliente, cli.nomeCliente
+        FROM PedidoV_Produto AS pedV
+        INNER JOIN Produto AS pro
+        ON pedV.idProduto = pro.idProduto
+        INNER JOIN Pedido_Venda AS ped
+        ON pedV.idPedidoV = ped.idPedido
+        INNER JOIN Cliente AS cli
+        ON cli.idCliente = ped.cliente_id
+    </select>
+    
+    <select id="selecionarTodosPedidosVendaPorNome" resultMap="resultadoPedidoVenda" parameterType="String">
+        SELECT
+            pedV.idProduto, pedV.idPedidoV, pedV.quantidadeProduto,
+            pro.idProduto, pro.nome, pro.categoria,
+            pro.precoCompra, pro.precoVenda,
+            ped.idPedido, ped.nomePedido,
+            ped.data_pedido, ped.cliente_id,
+            cli.idCliente, cli.nomeCliente
+        FROM PedidoV_Produto AS pedV
+        INNER JOIN Produto AS pro
+        ON pedV.idProduto = pro.idProduto
+        INNER JOIN Pedido_Venda AS ped
+        ON pedV.idPedidoV = ped.idPedido
+        INNER JOIN Cliente AS cli
+        ON cli.idCliente = ped.cliente_id
+        WHERE ped.nomePedido LIKE #{nome}
+    </select>
+    
+    <select id="selecionarTodosPedidosVendaPorQuantidade" resultMap="resultadoPedidoVenda" parameterType="String">
+        SELECT
+            pedV.idProduto, pedV.idPedidoV, pedV.quantidadeProduto,
+            pro.idProduto, pro.nome, pro.categoria,
+            pro.precoCompra, pro.precoVenda,
+            ped.idPedido, ped.nomePedido,
+            ped.data_pedido, ped.cliente_id,
+            cli.idCliente, cli.nomeCliente
+        FROM PedidoV_Produto AS pedV
+        INNER JOIN Produto AS pro
+        ON pedV.idProduto = pro.idProduto
+        INNER JOIN Pedido_Venda AS ped
+        ON pedV.idPedidoV = ped.idPedido
+        INNER JOIN Cliente AS cli
+        ON cli.idCliente = ped.cliente_id
+        WHERE pedV.quantidadeProduto LIKE #{quantidade}
+    </select>
+    
+    <select id="selecionarTodosPedidosVendaPorProduto" resultMap="resultadoPedidoVenda" parameterType="String">
+        SELECT
+            pedV.idProduto, pedV.idPedidoV, pedV.quantidadeProduto,
+            pro.idProduto, pro.nome, pro.categoria,
+            pro.precoCompra, pro.precoVenda,
+            ped.idPedido, ped.nomePedido,
+            ped.data_pedido, ped.cliente_id,
+            cli.idCliente, cli.nomeCliente
+        FROM PedidoV_Produto AS pedV
+        INNER JOIN Produto AS pro
+        ON pedV.idProduto = pro.idProduto
+        INNER JOIN Pedido_Venda AS ped
+        ON pedV.idPedidoV = ped.idPedido
+        INNER JOIN Cliente AS cli
+        ON cli.idCliente = ped.cliente_id
+        WHERE pro.nome LIKE #{produto}
+    </select>
+    
+    <select id="selecionarTodosPedidosVendaPorClienteId" resultMap="resultadoPedidoVenda" parameterType="Integer">
+        SELECT
+            pedV.idProduto, pedV.idPedidoV, pedV.quantidadeProduto,
+            pro.idProduto, pro.nome, pro.categoria,
+            pro.precoCompra, pro.precoVenda,
+            ped.idPedido, ped.nomePedido,
+            ped.data_pedido, ped.cliente_id,
+            cli.idCliente, cli.nomeCliente
+        FROM PedidoV_Produto AS pedV
+        INNER JOIN Produto AS pro
+        ON pedV.idProduto = pro.idProduto
+        INNER JOIN Pedido_Venda AS ped
+        ON pedV.idPedidoV = ped.idPedido
+        INNER JOIN Cliente AS cli
+        ON cli.idCliente = ped.cliente_id
+        WHERE cli.idCliente = #{id}
+    </select>
+    
+    <select id="selecionarTodosPedidosVendaPorProdutoId" resultMap="resultadoPedidoVenda" parameterType="Integer">
+        SELECT
+            pedV.idProduto, pedV.idPedidoV, pedV.quantidadeProduto,
+            pro.idProduto, pro.nome, pro.categoria,
+            pro.precoCompra, pro.precoVenda,
+            ped.idPedido, ped.nomePedido,
+            ped.data_pedido, ped.cliente_id,
+            cli.idCliente, cli.nomeCliente
+        FROM PedidoV_Produto AS pedV
+        INNER JOIN Produto AS pro
+        ON pedV.idProduto = pro.idProduto
+        INNER JOIN Pedido_Venda AS ped
+        ON pedV.idPedidoV = ped.idPedido
+        INNER JOIN Cliente AS cli
+        ON cli.idCliente = ped.cliente_id
+        WHERE pro.idProduto = #{id}
+    </select>
+    
+    <select id="selecionarTodosPedidosVendaPorDataInicioEFim" resultMap="resultadoPedidoVenda" parameterType="map">
+        SELECT
+            pedV.idProduto, pedV.idPedidoV, pedV.quantidadeProduto,
+            pro.idProduto, pro.nome, pro.categoria,
+            pro.precoCompra, pro.precoVenda,
+            ped.idPedido, ped.nomePedido,
+            ped.data_pedido, ped.cliente_id,
+            cli.idCliente, cli.nomeCliente
+        FROM PedidoV_Produto AS pedV
+        INNER JOIN Produto AS pro
+        ON pedV.idProduto = pro.idProduto
+        INNER JOIN Pedido_Venda AS ped
+        ON pedV.idPedidoV = ped.idPedido
+        INNER JOIN Cliente AS cli
+        ON cli.idCliente = ped.cliente_id
+        WHERE ped.data_pedido BETWEEN #{dataInicio} AND #{dataFim}
+    </select>
+    
+    <insert id="inserirPedidoVProduto" parameterType="modelo.PedidoVProduto">
+        INSERT INTO PedidoV_Produto (idProduto, idPedidoV, quantidadeProduto)
+        VALUES 
+            (#{id_produto.id}, #{id_pedido.id}, #{quantidadeProduto});
+        
+    </insert>
+    
+    <insert id="inserirPedidoVenda" parameterType="modelo.PedidoVenda">
+        INSERT INTO Pedido_Venda (nomePedido, cliente_id, observacao, data_pedido)
+        VALUES 
+            (#{nome}, #{cliente_id.id}, #{observacao}, CURDATE());
+        
+        <selectKey keyProperty="id" resultType="Integer" order="AFTER">
+            select LAST_INSERT_ID() as idPedido
+        </selectKey>
+    </insert>
+           
+</mapper>

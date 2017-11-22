@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="PedidoCompra">
+    
+    <resultMap id="resultadoPedidoCompra" type="modelo.PedidoCompra">
+        <id property="id" column="idPedido"/>
+            <result property="nome" column="nomePedido" />
+            <result property="quantidade" column="quantidadePedido" />
+            <result property="observacao" column="observacao" />
+            <result property="status" column="status" />
+            <result property="dataInicio" column="data_inicio" />
+            <result property="dataFinal" column="data_final" />
+            <association property="produto_id" column="produto_id" javaType="modelo.Produto">
+                <id property="id" column="idProduto"/> 
+                <result property="nome" column="nome" />
+                <result property="quantidade" column="quantidade" />
+                <result property="precoVenda" column="precoVenda" />
+                <result property="precoCompra" column="precoCompra" />
+            </association>
+            <association property="fornecedor_id" column="fornecedor_id" javaType="modelo.Fornecedor">
+                <id property="id" column="id"/> 
+                <result property="nome" column="nomeFornecedor" />
+            </association>
+    </resultMap>
+    
+    <select id="selecionarTodosPedidosCompraPorIdProduto" resultMap="resultadoPedidoCompra" parameterType="Integer">
+        SELECT  
+            ped.idPedido, ped.nomePedido, ped.quantidadePedido, ped.observacao, ped.status, 
+            ped.data_inicio, ped.data_final, ped.produto_id, ped.fornecedor_id,
+            pro.idProduto, pro.nome, pro.quantidade, pro.precoVenda, pro.precoCompra, 
+            forn.id, forn.nomeFornecedor
+        FROM Pedido_Compra AS ped
+        INNER JOIN Produto AS pro
+        ON ped.produto_id = pro.idProduto
+        INNER JOIN Fornecedor AS forn
+        ON ped.fornecedor_id = forn.id
+        WHERE pro.idProduto = #{id}
+    </select>
+    
+    <select id="selecionarTodosPedidosCompra" resultMap="resultadoPedidoCompra">
+        SELECT  
+            ped.idPedido, ped.nomePedido, ped.quantidadePedido, ped.observacao, ped.status, 
+            ped.data_inicio, ped.data_final, ped.produto_id, ped.fornecedor_id,
+            pro.idProduto, pro.nome, pro.quantidade,
+            forn.id, forn.nomeFornecedor
+        FROM Pedido_Compra AS ped
+        INNER JOIN Produto AS pro
+        ON ped.produto_id = pro.idProduto
+        INNER JOIN Fornecedor AS forn
+        ON ped.fornecedor_id = forn.id
+    </select>
+    
+    <select id="selecionarTodosPedidosCompraPorNome" resultMap="resultadoPedidoCompra" parameterType="String">
+        SELECT  
+            ped.idPedido, ped.nomePedido, ped.quantidadePedido, ped.observacao, ped.status, 
+            ped.data_inicio, ped.data_final, ped.produto_id, ped.fornecedor_id,
+            pro.idProduto, pro.nome, pro.quantidade,
+            forn.id, forn.nomeFornecedor
+        FROM Pedido_Compra AS ped
+        INNER JOIN Produto AS pro
+        ON ped.produto_id = pro.idProduto
+        INNER JOIN Fornecedor AS forn
+        ON ped.fornecedor_id = forn.id
+        WHERE ped.nomePedido LIKE #{nome}
+    </select>
+    
+    <select id="selecionarTodosPedidosCompraPorQuantidade" resultMap="resultadoPedidoCompra" parameterType="String">
+        SELECT  
+            ped.idPedido, ped.nomePedido, ped.quantidadePedido, ped.observacao, ped.status, 
+            ped.data_inicio, ped.data_final, ped.produto_id, ped.fornecedor_id,
+            pro.idProduto, pro.nome, pro.quantidade,
+            forn.id, forn.nomeFornecedor
+        FROM Pedido_Compra AS ped
+        INNER JOIN Produto AS pro
+        ON ped.produto_id = pro.idProduto
+        INNER JOIN Fornecedor AS forn
+        ON ped.fornecedor_id = forn.id
+        WHERE ped.quantidadePedido LIKE #{quantidade}
+    </select>
+    
+    <select id="selecionarTodosPedidosCompraPorProduto" resultMap="resultadoPedidoCompra" parameterType="String">
+        SELECT  
+            ped.idPedido, ped.nomePedido, ped.quantidadePedido, ped.observacao, ped.status, 
+            ped.data_inicio, ped.data_final, ped.produto_id, ped.fornecedor_id,
+            pro.idProduto, pro.nome, pro.quantidade,
+            forn.id, forn.nomeFornecedor
+        FROM Pedido_Compra AS ped
+        INNER JOIN Produto AS pro
+        ON ped.produto_id = pro.idProduto
+        INNER JOIN Fornecedor AS forn
+        ON ped.fornecedor_id = forn.id
+        WHERE pro.nome LIKE #{produto}
+    </select>
+    
+    <select id="selecionarTodosPedidosCompraPorFornecedor" resultMap="resultadoPedidoCompra" parameterType="String">
+        SELECT  
+            ped.idPedido, ped.nomePedido, ped.quantidadePedido, ped.observacao, ped.status, 
+            ped.data_inicio, ped.data_final, ped.produto_id, ped.fornecedor_id,
+            pro.idProduto, pro.nome, pro.quantidade,
+            forn.id, forn.nomeFornecedor
+        FROM Pedido_Compra AS ped
+        INNER JOIN Produto AS pro
+        ON ped.produto_id = pro.idProduto
+        INNER JOIN Fornecedor AS forn
+        ON ped.fornecedor_id = forn.id
+        WHERE forn.nomeFornecedor LIKE #{fornecedor}
+    </select>
+    
+    <select id="selecionarTodosPedidosCompraPorStatus" resultMap="resultadoPedidoCompra" parameterType="String">
+        SELECT  
+            ped.idPedido, ped.nomePedido, ped.quantidadePedido, ped.observacao, ped.status, 
+            ped.data_inicio, ped.data_final, ped.produto_id, ped.fornecedor_id,
+            pro.idProduto, pro.nome, pro.quantidade,
+            forn.id, forn.nomeFornecedor
+        FROM Pedido_Compra AS ped
+        INNER JOIN Produto AS pro
+        ON ped.produto_id = pro.idProduto
+        INNER JOIN Fornecedor AS forn
+        ON ped.fornecedor_id = forn.id
+        WHERE ped.status LIKE #{status}
+    </select>
+    
+    <select id="selecionarTodosPedidosCompraPorDataInicioEFim" resultMap="resultadoPedidoCompra" parameterType="map">
+        SELECT  
+            ped.idPedido, ped.nomePedido, ped.quantidadePedido, ped.observacao, ped.status, 
+            ped.data_inicio, ped.data_final, ped.produto_id, ped.fornecedor_id,
+            pro.idProduto, pro.nome, pro.quantidade, pro.precoVenda, pro.precoCompra,
+            forn.id, forn.nomeFornecedor
+        FROM Pedido_Compra AS ped
+        INNER JOIN Produto AS pro
+        ON ped.produto_id = pro.idProduto
+        INNER JOIN Fornecedor AS forn
+        ON ped.fornecedor_id = forn.id
+        WHERE ped.data_final BETWEEN #{dataInicio} AND #{dataFim}
+    </select>
+    
+    <insert id="inserirPedidoCompra" parameterType="modelo.PedidoCompra">
+        INSERT INTO Pedido_Compra (nomePedido, quantidadePedido, produto_id, fornecedor_id, observacao, data_inicio)
+        VALUES 
+            (#{nome}, #{quantidade}, #{produto_id.id}, #{fornecedor_id.id}, #{observacao}, CURDATE());
+    </insert>
+    
+    <update id="atualizarStatusPedidoCompra" parameterType="modelo.PedidoCompra">
+        UPDATE Pedido_Compra
+        SET
+            status = #{status},
+            data_final = CURDATE()
+        WHERE
+            idPedido = #{id} 
+    </update>
+           
+</mapper>
+
+

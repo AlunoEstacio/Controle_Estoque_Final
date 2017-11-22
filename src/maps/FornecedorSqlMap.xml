@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="Fornecedor">
+    
+   <resultMap id="resultadoFornecedor" type="modelo.Fornecedor">
+        <id property="id" column="id"/>
+            <result property="nome" column="nomeFornecedor" />
+            <result property="cnpj" column="cnpj" />
+            <result property="email" column="email" />
+            <result property="telefone" column="telefone" />
+            <result property="ativo" column="ativo" />
+            <association property="endereco" column="endereco_id" javaType="modelo.Endereco">
+                <id property="id" column="idEndereco"/> 
+                <result property="cep" column="cep" />
+                <result property="rua" column="rua" />
+                <result property="numero" column="numero" />
+                <result property="bairro" column="bairro" />
+                <result property="cidade" column="cidade" />
+                <result property="estado" column="estado" />
+                <result property="complemento" column="complemento" />
+            </association>
+    </resultMap>
+    
+    <select id="selecionarTodosFornecedores" resultMap="resultadoFornecedor">
+        SELECT  
+            forn.id, forn.nomeFornecedor,
+            forn.cnpj, forn.email,
+            forn.telefone,forn.ativo,
+            forn.endereco_id, 
+            ende.idEndereco, ende.cep,
+            ende.rua, ende.numero,
+            ende.bairro, ende.cidade, 
+            ende.estado, ende.complemento
+        FROM Fornecedor AS forn
+        INNER JOIN Endereco AS ende
+        WHERE forn.endereco_id = ende.idEndereco
+    </select>
+    
+    <select id="selecionarTodosFornecedoresAtivos" resultMap="resultadoFornecedor">
+        SELECT  
+            forn.id, forn.nomeFornecedor,
+            forn.cnpj, forn.email,
+            forn.telefone, forn.ativo,
+            forn.endereco_id, 
+            ende.idEndereco, ende.cep,
+            ende.rua, ende.numero,
+            ende.bairro, ende.cidade, 
+            ende.estado, ende.complemento
+        FROM Fornecedor AS forn
+        INNER JOIN Endereco AS ende
+        WHERE forn.endereco_id = ende.idEndereco AND forn.ativo = 1
+    </select>
+    
+    <select id="selecionarTodosFornecedoresPorNome" resultMap="resultadoFornecedor" parameterType="String">
+        SELECT  
+            forn.id, forn.nomeFornecedor,
+            forn.cnpj, forn.email,
+            forn.telefone,forn.ativo,
+            forn.endereco_id, 
+            ende.idEndereco, ende.cep,
+            ende.rua, ende.numero,
+            ende.bairro, ende.cidade, 
+            ende.estado, ende.complemento
+        FROM Fornecedor AS forn
+        INNER JOIN Endereco AS ende
+        WHERE forn.endereco_id = ende.idEndereco AND forn.ativo = 1 AND forn.nomeFornecedor LIKE #{nome}
+    </select>
+    
+    <select id="selecionarTodosFornecedoresPorCNPJ" resultMap="resultadoFornecedor" parameterType="String">
+        SELECT  
+            forn.id, forn.nomeFornecedor,
+            forn.cnpj, forn.email,
+            forn.telefone,forn.ativo,
+            forn.endereco_id, 
+            ende.idEndereco, ende.cep,
+            ende.rua, ende.numero,
+            ende.bairro, ende.cidade, 
+            ende.estado, ende.complemento
+        FROM Fornecedor AS forn
+        INNER JOIN Endereco AS ende
+        WHERE forn.endereco_id = ende.idEndereco AND forn.ativo = 1 AND forn.cnpj LIKE #{cnpj}
+    </select>
+    
+    <select id="selecionarTodosFornecedoresPorCidade" resultMap="resultadoFornecedor" parameterType="String">
+        SELECT  
+            forn.id, forn.nomeFornecedor,
+            forn.cnpj, forn.email,
+            forn.telefone,forn.ativo,
+            forn.endereco_id, 
+            ende.idEndereco, ende.cep,
+            ende.rua, ende.numero,
+            ende.bairro, ende.cidade, 
+            ende.estado, ende.complemento
+        FROM Fornecedor AS forn
+        INNER JOIN Endereco AS ende
+        WHERE forn.endereco_id = ende.idEndereco AND forn.ativo = 1 AND ende.cidade LIKE #{cidade}
+    </select>
+ 
+    <insert id="inserirFornecedo" parameterType="modelo.Fornecedor">
+        INSERT INTO Fornecedor (nomeFornecedor, cnpj, endereco_id, email, telefone)
+            VALUES 
+            (#{nome}, #{cnpj}, #{endereco.id}, #{email}, #{telefone})
+    </insert>
+    
+    <update id="atualizarFornecedor" parameterType="modelo.Fornecedor">
+        UPDATE Fornecedor
+        SET
+            nomeFornecedor = #{nome},
+            cnpj = #{cnpj},
+            email = #{email},
+            telefone = #{telefone}
+        WHERE
+            id = #{id}
+    </update>
+    
+    <delete id="InativarFornecedor" parameterType="Integer">
+        UPDATE Fornecedor
+        SET
+            ativo = 0
+        WHERE
+            id = #{id}
+    </delete>
+    
+    
+           
+</mapper>
+
+

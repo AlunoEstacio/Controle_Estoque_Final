@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="Login">
+ 
+    <resultMap id="resultLoginFuncionario" type="modelo.Funcionario">
+        <id property="id" column="id"/>
+        <result property="nome" column="nome" />
+        <result property="cpf" column="cpf" />
+        <result property="cargo" column="cargo" />
+        <result property="email" column="email" />
+        <result property="senha" column="senha" />
+    </resultMap>
+ 
+    <select id="selecionarLoginFuncionario" resultMap="resultLoginFuncionario" parameterType="String" >
+        SELECT * FROM Funcionario WHERE email = #{email}
+    </select>
+    
+    <update id="atualizarSenha" parameterType="modelo.Funcionario">
+        UPDATE Funcionario
+        SET
+            senha = #{senha},
+            recuperacaoSenha = 0
+        WHERE
+            email = #{email} 
+    </update>
+           
+</mapper>
+
+

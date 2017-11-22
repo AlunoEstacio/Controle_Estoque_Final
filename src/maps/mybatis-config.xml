@@ -1,0 +1,48 @@
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ 
+<configuration>
+    <typeAliases>
+        <typeAlias alias="Login" type="modelo.Funcionario" />
+        <typeAlias alias="Funcionario" type="modelo.Funcionario" />
+        <typeAlias alias="Endereco" type="modelo.Endereco" />
+        <typeAlias alias="Cliente" type="modelo.Cliente" />
+        <typeAlias alias="Fornecedor" type="modelo.Fornecedor" />
+        <typeAlias alias="Produto" type="modelo.Produto" />
+        <typeAlias alias="PedidoCompra" type="modelo.PedidoCompra" />
+        <typeAlias alias="PedidoVenda" type="modelo.PedidoVProduto" />
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://mysql552.umbler.com:41890/controledestoque"/>
+                <property name="username" value="aluno25"/>
+                <property name="password" value="alunoestacio2016"/>
+                <property name="poolPingQuery" value="SELECT id FROM user WHERE id = 1" />
+                <property name="poolPingEnabled" value="true" />
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="maps/LoginSqlMap.xml" />
+        <mapper resource="maps/FuncionarioSqlMap.xml" />
+        <mapper resource="maps/EnderecoSqlMap.xml" />
+        <mapper resource="maps/ClienteSqlMap.xml" />
+        <mapper resource="maps/FornecedorSqlMap.xml" />
+        <mapper resource="maps/ProdutoSqlMap.xml" />
+        <mapper resource="maps/PedidoCompraXMLMap.xml" />
+        <mapper resource="maps/PedidoVendaSqlMap.xml" />
+    </mappers>
+</configuration>
+
+
+
+
+
+
+
+
+        

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="Produto">
+    
+    <resultMap id="resultadoProduto" type="modelo.Produto">
+        <id property="id" column="idProduto"/>
+            <result property="nome" column="nome" />
+            <result property="quantidade" column="quantidade" />
+            <result property="categoria" column="categoria" />
+            <result property="marca" column="marca" />
+            <result property="localizacao" column="localizacao" />
+            <result property="observacao" column="observacao" />
+            <result property="precoCompra" column="precoCompra" />
+            <result property="precoVenda" column="precoVenda" />
+            <result property="dataCadastro" column="dataCadastro" />
+            <association property="fornecedor" column="fornecedor_id" javaType="modelo.Fornecedor">
+                <id property="id" column="id"/> 
+                <result property="nome" column="nomeFornecedor" />
+                <result property="cnpj" column="cnpj" />
+                <result property="email" column="email" />
+                <result property="telefone" column="telefone" />
+            </association>
+    </resultMap>
+    
+    <select id="selecionarProdutoPorId" resultMap="resultadoProduto" parameterType="Integer">
+        SELECT 
+            idProduto,
+            nome, quantidade,
+            categoria, marca,
+            localizacao, observacao,
+            precoCompra, precoVenda
+        FROM Produto
+        WHERE idProduto = #{id}
+    </select>
+    
+    <select id="selecionarProdutosPorId" resultMap="resultadoProduto" parameterType="Integer">
+        SELECT 
+            pro.idProduto,
+            pro.nome, pro.quantidade,
+            pro.categoria, pro.marca,
+            pro.localizacao, pro.observacao,
+            pro.precoCompra, pro.precoVenda,
+            pro.fornecedor_id, forn.id,
+            forn.nomeFornecedor, forn.cnpj,
+            forn.email, forn.telefone
+        FROM Produto as pro 
+        INNER JOIN Fornecedor as forn 
+        WHERE pro.fornecedor_id = forn.id AND pro.fornecedor_id = #{id}
+    </select>
+    
+    <select id="selecionarTodosProdutos" resultMap="resultadoProduto">
+        SELECT 
+            pro.idProduto,
+            pro.nome, pro.quantidade,
+            pro.categoria, pro.marca,
+            pro.localizacao, pro.observacao,
+            pro.precoCompra, pro.precoVenda,
+            pro.dataCadastro,
+            pro.fornecedor_id, forn.id,
+            forn.nomeFornecedor, forn.cnpj,
+            forn.email, forn.telefone
+        FROM Produto as pro 
+        INNER JOIN Fornecedor as forn 
+        WHERE pro.fornecedor_id = forn.id
+    </select>
+    
+    <select id="selecionarTodosProdutosPorNome" resultMap="resultadoProduto" parameterType="String">
+        SELECT
+            pro.idProduto,
+            pro.nome, pro.quantidade,
+            pro.categoria, pro.marca,
+            pro.localizacao, pro.observacao,
+            pro.precoCompra, pro.precoVenda,
+            pro.fornecedor_id, forn.id,
+            forn.nomeFornecedor, forn.cnpj,
+            forn.email, forn.telefone
+        FROM Produto as pro 
+        INNER JOIN Fornecedor as forn 
+        WHERE pro.fornecedor_id = forn.id AND pro.nome LIKE #{nome}
+    </select>
+    
+    <select id="selecionarTodosProdutosPorMarca" resultMap="resultadoProduto" parameterType="String">
+        SELECT
+            pro.idProduto,
+            pro.nome, pro.quantidade,
+            pro.categoria, pro.marca,
+            pro.localizacao, pro.observacao,
+            pro.precoCompra, pro.precoVenda,
+            pro.fornecedor_id, forn.id,
+            forn.nomeFornecedor, forn.cnpj,
+            forn.email, forn.telefone
+        FROM Produto as pro 
+        INNER JOIN Fornecedor as forn 
+        WHERE pro.fornecedor_id = forn.id AND pro.marca LIKE #{marca}
+    </select>
+    
+    <select id="selecionarTodosProdutosPorFornecedor" resultMap="resultadoProduto" parameterType="String">
+        SELECT
+            pro.idProduto,
+            pro.nome, pro.quantidade,
+            pro.categoria, pro.marca,
+            pro.localizacao, pro.observacao,
+            pro.precoCompra, pro.precoVenda,
+            pro.fornecedor_id, forn.id,
+            forn.nomeFornecedor, forn.cnpj,
+            forn.email, forn.telefone
+        FROM Produto as pro 
+        INNER JOIN Fornecedor as forn 
+        WHERE pro.fornecedor_id = forn.id AND forn.nomeFornecedor LIKE #{fornecedor}
+    </select>
+    
+    <select id="selecionarTodosProdutosPorCategoria" resultMap="resultadoProduto" parameterType="String">
+        SELECT
+            pro.idProduto,
+            pro.nome, pro.quantidade,
+            pro.categoria, pro.marca,
+            pro.localizacao, pro.observacao,
+            pro.precoCompra, pro.precoVenda,
+            pro.fornecedor_id, forn.id,
+            forn.nomeFornecedor, forn.cnpj,
+            forn.email, forn.telefone
+        FROM Produto as pro 
+        INNER JOIN Fornecedor as forn 
+        WHERE pro.fornecedor_id = forn.id AND pro.categoria LIKE #{categoria}
+    </select>
+    
+    <select id="selecionarTodosProdutosPorQuantidade" resultMap="resultadoProduto" parameterType="String">
+        SELECT
+            pro.idProduto,
+            pro.nome, pro.quantidade,
+            pro.categoria, pro.marca,
+            pro.localizacao, pro.observacao,
+            pro.precoCompra, pro.precoVenda,
+            pro.fornecedor_id, forn.id,
+            forn.nomeFornecedor, forn.cnpj,
+            forn.email, forn.telefone
+        FROM Produto as pro 
+        INNER JOIN Fornecedor as forn 
+        WHERE pro.fornecedor_id = forn.id AND pro.quantidade LIKE #{quantidade}
+    </select>
+ 
+    <insert id="inserirProduto" parameterType="modelo.Produto">
+        INSERT INTO Produto (nome, quantidade, fornecedor_id, categoria, marca, localizacao, observacao, 
+            precoCompra, precoVenda, dataCadastro)
+        VALUES 
+            (#{nome}, #{quantidade}, #{fornecedor.id}, #{categoria}, #{marca}, #{localizacao}, #{observacao}, 
+                #{precoCompra}, #{precoVenda}, CURDATE());
+    </insert>
+    
+    <update id="atualizarProduto" parameterType="modelo.Produto">
+        UPDATE Produto
+        SET
+            nome = #{nome},
+            quantidade = #{quantidade},
+            fornecedor_id = #{fornecedor.id},
+            categoria = #{categoria},
+            marca = #{marca},
+            localizacao = #{localizacao},
+            precoCompra = #{precoCompra},
+            precoVenda = #{precoVenda},
+            observacao = #{observacao}
+        WHERE
+            idProduto = #{id} 
+    </update>
+    
+    <update id="atualizarQuantidadeProduto" parameterType="modelo.Produto">
+        UPDATE Produto
+        SET
+            quantidade = #{quantidade}
+        WHERE
+            idProduto = #{id} 
+    </update>
+    
+    <delete id="deletarProduto" parameterType="Integer" >
+        DELETE FROM Produto WHERE idProduto = #{id}
+    </delete>
+           
+</mapper>
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="Endereco">
+ 
+    <insert id="inserirEndereco" parameterType="modelo.Endereco">
+        INSERT INTO Endereco (cep, rua, numero, bairro, cidade, estado, complemento)
+            VALUES 
+            (#{cep}, #{rua}, #{numero}, #{bairro}, #{cidade}, #{estado}, #{complemento});
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+    </insert>
+    
+    <update id="atualizarEndereco" parameterType="modelo.Endereco">
+        UPDATE Endereco
+        SET
+            cep = #{cep},
+            rua = #{rua},
+            numero = #{numero},
+            bairro = #{bairro},
+            cidade = #{cidade},
+            estado = #{estado},
+            complemento = #{complemento}
+        WHERE
+            idEndereco = #{id} 
+    </update>
+    
+    <delete id="deletarEndereco" parameterType="Integer">
+        DELETE FROM Endereco WHERE idEndereco = #{id}
+    </delete>
+           
+</mapper>
